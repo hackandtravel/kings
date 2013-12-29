@@ -1,6 +1,6 @@
-cards = [];
-names = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
-types = ["spades", "clubs", "diamonds", "hearts"];
+var cards = [];
+var names = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
+var types = ["spades", "clubs", "diams", "hearts"];
 
 // creates a new full card deck
 function createCardDeck()
@@ -8,9 +8,9 @@ function createCardDeck()
 	cards = [];
 	for( i = 0; i<52; i++)
 	{
-		name = names[i%13];
-		color = i <26 ? "black" : "red";
-		type = types[Math.floor(i/13)]
+		var name = names[i%13];
+		var color = i <26 ? "black" : "red";
+		var type = types[Math.floor(i/13)]
 		cards.push({id: i, name: name, color: color, type: type});
 	}
 	
@@ -21,10 +21,10 @@ function createCardDeck()
 function shuffle()
 {
 // To shuffle an array a of n elements (indices 0..n-1):
-  for (i= cards.length-1; i>0; i--)
+  for (var i= cards.length-1; i>0; i--)
   {
-	j = Math.floor(Math.random() * (i+1));
-	tmp = cards[j];
+	var j = Math.floor(Math.random() * (i+1));
+	var tmp = cards[j];
 	cards[j] = cards[i];
 	cards[i] = tmp;
   }

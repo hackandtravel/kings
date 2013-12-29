@@ -27,8 +27,11 @@ body {
     background-color:#fff;
     width:100%;
     height:100%;
-    padding:10px;
   font-weight: 700;
+}
+
+#app {
+    padding:10px;
 }
 
 h1, h2, p, .app .card {
@@ -60,6 +63,16 @@ h1, h2, p, .app .card {
 
 .red {
   color: #d9534f;
+}
+
+.king.red {
+  color: #fff;
+  background-color: #d9534f;
+}
+
+.king.black {
+  color: #fff;
+  background-color: #333;
 }
 
 hr {
