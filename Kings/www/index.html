@@ -29,7 +29,7 @@
     </head>
     <body>
         <script id="app-template" type="text/x-handlebars-template">
-          <div class="<%= color %>">
+          <div class="app <%= color %>">
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;">
                 </div>
@@ -46,7 +46,7 @@
           </div>
         </script>
 
-        <div id="app" class="app"></div>
+        <div id="app"></div>
 
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/vendor/jquery.js"></script>

@@ -113,10 +113,14 @@ var app = {
             console.log("KING");
             card.text = kingText;
             card.text2 = "";
-            app.kings++;
           }
 
           $("#app").html(this.template(card));
+
+          if (app.kings == 4) {
+            $("#app .app").addClass("king")
+            app.kings++;
+          }
         } 
         else {
           // HACK
