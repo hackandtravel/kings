@@ -1,11 +1,12 @@
 var cards = [];
 var names = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
 var types = ["spades", "clubs", "diams", "hearts"];
-
+var removedCards = [];
 // creates a new full card deck
 function createCardDeck()
 {
 	cards = [];
+	remainingCards = [];
 	for( i = 0; i<52; i++)
 	{
 		var name = names[i%13];
@@ -32,5 +33,8 @@ function shuffle()
 // return undefined if there are no cards left
 function getNextCard()
 {
-	return cards.pop();
+	var remCard = cards.pop();
+	removedCards.push(remCard);
+	return remCard;
 }
+
