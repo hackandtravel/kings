@@ -55,11 +55,11 @@ h1, h2, p, .app .card {
 .app .card {
   float: right;
   position: relative;
-  top: -3px;
+  top: -4px;
 }
 
 .app .color {
-  font-size: 45px;
+  font-size: 40px;
   line-height: 38px;
 }
 
@@ -69,6 +69,7 @@ h1, h2, p, .app .card {
 .app h1 {
   margin-top: 10px;
   font-weight: 900;
+  font-size: 32px;
 }
 
 .app p {
@@ -174,15 +175,11 @@ hr {
   -o-transition: -o-transform 0.3s;
   transition: transform 0.3s;
 
-  -webkit-transform: translateX(100%);
-  -moz-transform: translateX(100%);
-  -ms-transform: translateX(100%);
-  -o-transform: translateX(100%);
-  transform: translateX(100%);
-}
-
-.common {
-
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
 }
 
 .rotate {
@@ -190,10 +187,37 @@ hr {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 6px 10px 0 10px;
+  padding: 0 10px;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
+}
+
+.king-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.progress-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #333;
+  border-radius: 3px;
+  float: left;
+  margin-left: 2px;
+}
+
+.black .progress-dot {
+  background-color: #d9534f;
+} 
+
+.red.king .progress-dot {
+  background-color: #d9534f;
+}
+
+.black.king .progress-dot {
+  background-color: #333;
 }

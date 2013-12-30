@@ -24,7 +24,7 @@ var titles = {
   4: "Give 2 Take 2",
   5: "Rule",
   6: "Thumbs",
-  7: "RYHTH",
+  7: "Hands Up",
   8: "Mate",
   9: "Rhyme Time",
   10:	"Category",
@@ -34,10 +34,10 @@ var titles = {
 }
 
 var texts = {
-  A: "Each player starts drinking at the same time as the person to their left.",
+  A: "Each player starts to drink at the same time as the person to their left.",
   2: "Point at two people and tell them to drink.",
   3: "Take three drinks.",
-  4: "Give out two drinks, and take two yourself.",
+  4: "Give out two drinks, and take two drinks yourself.",
   5: "Set a rule to be followed.",
   6: "Place your thumb on the table whenever you like.",
   7: "Last person to raise their hand must drink.",
@@ -58,7 +58,7 @@ var texts2 = {
   4: "",
   5: "E.g.: drink with your left hand. Tap your head before you drink. Don't use Christian names.",
   6: "The last person to place their thumb on the table must drink.",
-  7: "Raise Your Hand To Heaven",
+  7: "",
   8: "",
   9: "This person must drink.",
   10: "This person must drink.",
@@ -97,13 +97,14 @@ var app = {
 
     bindEvents: function() {
         var card = {
-          title: "Kings",
-          text: app.beerify("Remember to drink in moderation!"),
-          text2: "",
+          title: "Kings Game",
+          text: "Tap anywhere for the next card.",
+          text2: app.beerify("Remember to drink in moderation!"),
           type: "",
           name: "",
           color: "red",
           percent: 0,
+          kings: 0
         };
         $("#app").html(this.template(card)).find(".app").addClass("king");
         document.addEventListener("click", app.clicked, false);
@@ -134,6 +135,7 @@ var app = {
             name: model.name,
             color: model.color,
             percent: (app.i / 52) * 100,
+            kings: app.kings
           };
 
           if (app.kings == 4) {
