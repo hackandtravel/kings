@@ -96,7 +96,16 @@ var app = {
     },
 
     bindEvents: function() {
-        document.addEventListener('deviceready', app.clicked, false);
+        var card = {
+          title: "Kings",
+          text: app.beerify("Remember to drink in moderation!"),
+          text2: "",
+          type: "",
+          name: "",
+          color: "red",
+          percent: 0,
+        };
+        $("#app").html(this.template(card)).find(".app").addClass("king");
         document.addEventListener("click", app.clicked, false);
     },
 
@@ -125,8 +134,6 @@ var app = {
             name: model.name,
             color: model.color,
             percent: (app.i / 52) * 100,
-            icon: "chevron-right",
-            footerText: "Tap somewhere for the next card"
           };
 
           if (app.kings == 4) {
@@ -134,8 +141,6 @@ var app = {
             card.text = app.beerify(kingText);
             card.text2 = "";
             card.percent = 100;
-            card.icon = "repeat",
-            card.footerText = "Tap somewhere for another game"
           }
 
           $(sel).html(this.template(card));
@@ -147,7 +152,7 @@ var app = {
             app.i = 0;
             app.kings = 0;
           }
-        } 
+        }
     },
 
     onDeviceReady: function() {
