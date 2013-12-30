@@ -38,3 +38,6 @@ function getNextCard()
 	return remCard;
 }
 
+function getPrevCard() {
+  return removedCards[removedCards.length - 1];
+}

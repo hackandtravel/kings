@@ -27,25 +27,25 @@ var titles = {
   7: "RYHTH",
   8: "Mate",
   9: "Rhyme Time",
-  10:	"Categories",
+  10:	"Category",
   J: "Guys Drink",
   Q: "Girls Drink",
   K: "King's Cup"
 }
 
 var texts = {
-  A: "Each player starts drinking their beverage at the same time as the person to their left.",
+  A: "Each player starts drinking at the same time as the person to their left.",
   2: "Point at two people and tell them to drink.",
   3: "Take three drinks.",
   4: "Give out two drinks, and take two yourself.",
   5: "Set a rule to be followed.",
-  6: "Place your thumb on the table, and try to do this without anyone noticing.",
-  7: "Last person to raise their hand will drink.",
+  6: "Place your thumb on the table whenever you like.",
+  7: "Last person to raise their hand must drink.",
   8: "Choose a person to be your mate and they drink when you drink for the rest of the game.",
-  9: "Say a word, and the person to your right has to say a word that rhymes. This continues around the table until someone can't think of a word.",
-  10:	"Come up with a category of things, and the person to your right must come up with something that falls within that category. This goes on around the table until someone can't come up with anything.",
-  J: "All the guys at the table must take a drink",
-  Q: "All the girls at the table must take a drink",
+  9: "Say a word, and the person to your right has to say a word that rhymes. This continues until someone can't.",
+  10:	"Come up with a category, and the person to your right must name something that falls within that category. This continues until someone can't.",
+  J: "All the guys at the table must take a drink.",
+  Q: "All the girls at the table must take a drink.",
   K: "Put some of your drink into the King's Cup."
 }
 
@@ -56,15 +56,15 @@ var texts2 = {
   2: "You can also tell one person to take two drinks.",
   3: "",
   4: "",
-  5: "E.g. drink with your left hand. Tap your head before you drink. Don't use Christian names.",
+  5: "E.g.: drink with your left hand. Tap your head before you drink. Don't use Christian names.",
   6: "The last person to place their thumb on the table must drink.",
-  7: "",
+  7: "Raise Your Hand To Heaven",
   8: "",
   9: "This person must drink.",
   10: "This person must drink.",
   J: "",
   Q: "",
-  K: "When the 4th King is drawn, the person who drew the 4th King must drink the contents of the King's Cup."
+  K: "When the 4th King is drawn, this person must drink the contents of the King's Cup."
 
 }
 
@@ -77,65 +77,77 @@ var app = {
 
     template: _.template($("#app-template").html()),
 
-    bindEvents: function() {
-        document.addEventListener('deviceready', function() {
-          app.nextCard();
-        }, false);
+    locked: false,
 
-        document.addEventListener("click", function() {
-          app.nextCard();
-        }, false);
+    clicked: function() {
+      if (!app.locked) {
+        app.locked = true;
+
+        app.i++;
+        var next = getNextCard();
+        app.renderCard(next, "#app-next");
+
+        $("#app").addClass("page-left");
+        setTimeout(function() {
+          app.locked = false;
+          $("#app").html($("#app-next").clone()).removeClass("page-left");
+        }, 300);
+      }
+    },
+
+    bindEvents: function() {
+        document.addEventListener('deviceready', app.clicked, false);
+        document.addEventListener("click", app.clicked, false);
     },
 
     i: 0,
 
     kings: 0,
 
-    nextCard: function() {
-        var model = getNextCard();
+    beerIcon: '<i class="fa fa-beer"></i>',
 
+    beerify: function(text) {
+      return text
+        .replace(/[dD]rinking/g, app.beerIcon)
+        .replace(/[dD]rinks/g, app.beerIcon)
+        .replace(/[dD]rink/g, app.beerIcon)
+    },
+
+    renderCard: function(model, sel) {
         if (model != null) {
-          app.i++;
-
           if(model.name == "K") app.kings++;
 
           var card = {
             title: titles[model.name],
-            text: texts[model.name],
-            text2: texts2[model.name],
+            text: app.beerify(texts[model.name]),
+            text2: app.beerify(texts2[model.name]),
             type: "&" + model.type + ";",
             name: model.name,
             color: model.color,
             percent: (app.i / 52) * 100,
+            icon: "chevron-right",
+            footerText: "Tap somewhere for the next card"
           };
 
           if (app.kings == 4) {
             console.log("KING");
-            card.text = kingText;
+            card.text = app.beerify(kingText);
             card.text2 = "";
+            card.percent = 100;
+            card.icon = "repeat",
+            card.footerText = "Tap somewhere for another game"
           }
 
-          $("#app").html(this.template(card));
+          $(sel).html(this.template(card));
 
           if (app.kings == 4) {
-            $("#app .app").addClass("king")
-            app.kings++;
+            $(sel).find(".app").addClass("king");
+            createCardDeck();
+            shuffle();
+            app.i = 0;
+            app.kings = 0;
           }
         } 
-        else {
-          // HACK
-          var card = {
-            title: "Game Over",
-            text: "",
-            text2: "",
-            type: "",
-            name: "",
-            color: "black",
-            percent: 100,
-          };
-
-          $("#app").html(this.template(card));
-        }
     },
 
     onDeviceReady: function() {
