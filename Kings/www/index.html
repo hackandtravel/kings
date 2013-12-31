@@ -21,33 +21,37 @@
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
+
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+
         <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="css/robotoslab.css">
         <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css" />
+
         <title>Kings</title>
     </head>
     <body>
         <script id="app-template" type="text/x-handlebars-template">
-          <div class="app <%= color %>">
+          <div class="app <%= color %> <%= name %>">
               <div>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<%= percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percent %>%;"></div>
-                <div class="king-count">
-                  <% for (var i=0; i < kings; i++) { %>
-                    <div class="progress-dot"></div>
-                  <% } %>
-                </div>
               </div>
                 <h1><%= title %> <span class="card"><span class="color"><%= type %></span> <span class="name"><%= name %></span></span></h1>
                 <hr/>
               </div>
-              <p><%= text %></p>
-              <p class="muted"><%= text2 %></p>
+              <p class=""><%= text %></p>
+              <p class="thin"><%= text2 %></p>
               <div class="rotate">
                 <h1><%= title %> <span class="card"><span class="color"><%= type %></span> <span class="name"><%= name %></span></span></h1>
                 <hr/>
+                <div class="king-count">
+                  <% for (var i=0; i < kings; i++) { %>
+                    <div class="dot"></div>
+                  <% } %>
+                </div>
               </div>
           </div>
         </script>

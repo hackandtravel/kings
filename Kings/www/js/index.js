@@ -97,16 +97,16 @@ var app = {
 
     bindEvents: function() {
         var card = {
-          title: "Kings Game",
+          title: "Kings",
           text: "Tap anywhere for the next card.",
           text2: app.beerify("Remember to drink in moderation!"),
           type: "",
           name: "",
           color: "red",
-          percent: 0,
-          kings: 0
+          percent: 100,
+          kings: 4
         };
-        $("#app").html(this.template(card)).find(".app").addClass("king");
+        $("#app").html(this.template(card)).find(".app").addClass("last-king");
         document.addEventListener("click", app.clicked, false);
     },
 
@@ -148,7 +148,7 @@ var app = {
           $(sel).html(this.template(card));
 
           if (app.kings == 4) {
-            $(sel).find(".app").addClass("king");
+            $(sel).find(".app").addClass("last-king");
             createCardDeck();
             shuffle();
             app.i = 0;

@@ -27,11 +27,11 @@ body {
     background-color:#fff;
     width:100%;
     height:100%;
-  font-weight: 700;
 }
 
 .app {
-    padding:10px;
+    padding: 10px 10px 0;
+    padding: 10px 2.5vw 0;
     position: absolute;
     top: 0;
     right: 0;
@@ -55,28 +55,53 @@ h1, h2, p, .app .card {
 .app .card {
   position: absolute;
   right: 10px;
+  right: 2.5vw;
 }
 
 .app h1 {
-  margin-top: 15px;
-  font-weight: 900;
+  font-family: 'Roboto Slab', serif;
   font-size: 32px;
+  font-size: 10vw;
+  font-weight: 700;
 }
 
 .app p {
+  font-family: 'Roboto Slab', serif;
   font-size: 24px;
+  font-size: 7vw;
+  font-weight: 400;
+}
+
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+  .app h1 {
+    font-size: 32px;
+    font-size: 10vh;
+  }
+
+  .app p {
+    font-size: 24px;
+    font-size: 7vh;
+  }
 }
 
 .red {
   color: #d9534f;
 }
 
-.king.red {
+.K.black {
+  background-color: rgba(51, 51, 51, 0.125);
+}
+
+.K.red {
+  background-color: rgba(217, 83, 79, 0.125);
+}
+
+.last-king.red {
   color: #fff;
   background-color: #d9534f;
 }
 
-.king.black {
+.last-king.black {
   color: #fff;
   background-color: #333;
 }
@@ -93,34 +118,25 @@ hr {
   border-color: #333;
 }
 
-.king.red hr {
+.last-king.red hr {
   border-color: #fff;
 }
 
-.king.black hr {
+.last-king.black hr {
   border-color: #fff;
 }
 
 .muted {
-  opacity: 0.67;
+  opacity: 0.75;
 }
 
-#help {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  padding: 10px;
-  padding-top: 0;
-}
-
-#help p {
-  font-size: 16px;
+.thin {
+  font-weight: 300!important;
 }
 
 .progress {
   width: 100%;
-  height: 8px;
+  height: 10px;
   position: absolute;
   top: 0;
   left: 0;
@@ -135,19 +151,19 @@ hr {
   background-color: #333;
 }
 
-.king.red .progress {
+.last-king.red .progress {
   background-color: #d9534f;
 }
 
-.king.black .progress {
+.last-king.black .progress {
   background-color: #333;
 }
 
-.king.red .progress-bar {
+.last-king.red .progress-bar {
   background-color: #fff;
 }
 
-.king.black .progress-bar {
+.last-king.black .progress-bar {
   background-color: #fff;
 }
 
@@ -179,6 +195,7 @@ hr {
   left: 0;
   width: 100%;
   padding: 0 10px;
+  padding: 0 2.5vw;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
@@ -187,28 +204,23 @@ hr {
 }
 
 .king-count {
-  position: absolute;
-  top: 0;
-  right: 0;
+  width: 100%;
+  text-align: center;
 }
 
-.progress-dot {
-  width: 8px;
-  height: 8px;
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
   background-color: #333;
-  border-radius: 4px;
-  float: left;
+  border-radius: 5px;
   margin-left: 2px;
 }
 
-.black .progress-dot {
+.red .dot {
   background-color: #d9534f;
 } 
 
-.red.king .progress-dot {
-  background-color: #d9534f;
-}
-
-.black.king .progress-dot {
-  background-color: #333;
+.last-king .dot {
+  background-color: #fff;
 }
