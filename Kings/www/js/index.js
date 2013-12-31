@@ -98,8 +98,8 @@ var app = {
     bindEvents: function() {
         var card = {
           title: "Kings",
-          text: "Tap anywhere for the next card.",
-          text2: app.beerify("Remember to drink in moderation!"),
+          text: "Tap anywhere to draw the next card.",
+          text2: app.beerify("Remember to drink in moderation."),
           type: "",
           name: "",
           color: "red",
@@ -128,7 +128,7 @@ var app = {
           if(model.name == "K") app.kings++;
 
           var card = {
-            title: titles[model.name],
+            title: app.beerify(titles[model.name]),
             text: app.beerify(texts[model.name]),
             text2: app.beerify(texts2[model.name]),
             type: "&" + model.type + ";",

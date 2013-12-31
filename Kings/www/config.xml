@@ -9,6 +9,7 @@
     <content src="index.html" />
     <access origin="*" />
 
+    <preference name="orientation" value="portrait" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="false" />
 </widget>
