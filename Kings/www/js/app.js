@@ -140,11 +140,15 @@ var AppView = React.createClass({
       this.width = screen.availWidth;
 
       var _this = this;
-
+      var alpha = 0.4;
+	  var magicNumber = 50;
       var animCount = this.animCount++;
-
+	  this.velocity = 0;
+	  this.lastTime = 0;
+	  this.lastPageX  = this.startX;
+	  this.pageX = this.startX;
       (function animloop(time) {
-        console.log("animloop " + animCount);
+       // console.log("animloop " + time);
 
         var s = _this.diff / _this.width;
         var sign = Math.sign(s);
@@ -152,19 +156,56 @@ var AppView = React.createClass({
 
         var pan = s - 0.25;
         pan = sign * Math.min(1, Math.max(0, pan));
-
+		
         _this.app.css("transform", "translateX("+_this.diff+"px) rotateY("+(90 * pan)+"deg)");
         _this.opacityNext.css("opacity", 0.75 + s);
         _this.opacity.css("opacity", 1.25 - s);
-
         if (_this.touching) {
-          requestAnimationFrame(animloop);
+         
+		  	// if wrong normalize screen width		
+			var timeDiff = time - _this.lastTime;	
+			if(timeDiff > 0 )
+			{
+				_this.velocity = _this.velocity * (1-alpha) + alpha*( _this.pageX-_this.lastPageX ) / timeDiff;
+			}
+			_this.lastPageX = _this.pageX;
+			_this.lastTime = time;		
+			requestAnimationFrame(animloop);
+			
         } else if (_this.animating) {
-          var deltaT = time - _this.lastTime;
+			var timeDiff = time - _this.lastTime;	
+			//_this.velocity = _this.velocity * (1-alpha) + alpha*(_this.pageX-_this.lastPageX) / timeDiff;
+			var direction = Math.sign(_this.pageX - _this.startX);
+			var futureX = Math.abs(_this.diff) + Math.abs(magicNumber * _this.velocity);
+			if(direction <0 )
+			{
+				if(futureX < _this.width / 2 ) 
+				{
+					console.log("finish swipe animation ", futureX, _this.width/2, magicNumber*_this.velocity );
+				}
+				else
+				{
+					console.log("DO nothing ", futureX, _this.width/2, magicNumber*_this.velocity );
+				}
+			}
+			else
+			{
+				if(futureX > _this.width / 2 ) 
+				{
+					console.log("finish swipe animation ", futureX, _this.width/2, magicNumber*_this.velocity );
+				}
+				else
+				{
+						console.log("DO nothing ", futureX, _this.width/2, magicNumber*_this.velocity );
+				}
+			}
+
+		
+		/* var deltaT = time - _this.lastTime;
           console.log(deltaT, _this.velocity);
           _this.lastTime = time;
 
-          if (sign > 0) {
+             if (sign > 0) {
             _this.diff -= 10;
             if (_this.diff <= 0) {
               _this.animating = false;
@@ -176,7 +217,7 @@ var AppView = React.createClass({
             }
           }
 
-          /*
+       
           _this.animating = false;
 
           if (Math.abs(_this.diff) > _this.width/2) {
@@ -186,9 +227,13 @@ var AppView = React.createClass({
           _this.app.css("transform", "translateX(0)");
           _this.opacityNext.css("opacity", 0);
           _this.opacity.css("opacity", 1);
-          */
-
-          requestAnimationFrame(animloop);
+         
+*/
+		_this.diff = _this.diff+ 5*_this.velocity;
+		if(_this.diff < _this.width || _this.diff > 0)
+		{
+          requestAnimationFrame(animloop); 
+		}
         }
       })();
     }
@@ -200,17 +245,9 @@ var AppView = React.createClass({
 
       var touch = e.targetTouches[0];
 
-      var pageXBefore = this.pageX;
       this.pageX = touch.pageX;
-      var deltaX = pageXBefore - this.pageX;
-
-      var timeBefore = this.time;
-      this.time = new Date().getTime();
-      var deltaT = this.time - timeBefore;
-
       this.diff = this.pageX - this.startX;
 
-      this.velocity = deltaX / deltaT;
     }
   },
 

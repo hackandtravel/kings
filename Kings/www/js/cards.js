@@ -2,7 +2,7 @@ var cards = [];
 var names = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"];
 var types = ["spades", "clubs", "diams", "hearts"];
 var removedCards = [];
-// creates a new full card deck
+// creates a new shuffled full card deck
 function createCardDeck()
 {
 	cards = [];
