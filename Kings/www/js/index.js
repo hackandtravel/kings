@@ -68,10 +68,14 @@ var texts2 = {
 
 }
 
+Math.sign = function(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; };
+
 var app = {
     initialize: function() {
         createCardDeck();
         shuffle();
+        this.i++;
+        this.renderCard(getNextCard(), "#app-next");
         this.bindEvents();
     },
 
@@ -80,19 +84,22 @@ var app = {
     locked: false,
 
     clicked: function() {
-      if (!app.locked) {
-        app.locked = true;
+      if (!this.locked) {
+        this.locked = true;
 
-        app.i++;
-        var next = getNextCard();
-        app.renderCard(next, "#app-next");
+        //$("#app").addClass("page-left");
 
-        $("#app").addClass("page-left");
         setTimeout(function() {
           app.locked = false;
-          $("#app").html($("#app-next").clone()).removeClass("page-left");
+          app.fullyLoaded();
         }, 300);
       }
+    },
+
+    fullyLoaded: function() {
+        $("#app").html($("#app-next .app").clone()); //.removeClass("page-left");
+        this.i++;
+        this.renderCard(getNextCard(), "#app-next");
     },
 
     bindEvents: function() {
@@ -106,8 +113,80 @@ var app = {
           percent: 100,
           kings: 4
         };
+
         $("#app").html(this.template(card)).find(".app").addClass("last-king");
-        document.addEventListener("click", app.clicked, false);
+        //document.addEventListener("click", app.clicked, false);
+
+        var _this = app;
+
+        document.addEventListener("touchstart", function(e) {
+          if (e.targetTouches.length == 1) {
+            var touch = e.targetTouches[0];
+
+            // $("#board").removeClass("transition");
+            _this.startX = touch.pageX;
+            _this.diff = 0;
+            _this.diffValue = "0";
+            _this.touching = true;
+
+            _this.app = $("#app");
+            _this.appNext = $("#app-next");
+            _this.opacity = _this.app.find(".opacity");
+            _this.opacityNext = _this.appNext.find(".opacity");
+
+            _this.width = screen.availWidth;
+
+            (function animloop(time) {
+              if (_this.touching) {
+                var s = _this.diff / _this.width;
+                var sign = Math.sign(s);
+                s = Math.abs(s / 2);
+
+                var pan = s;
+                pan = sign * Math.min(1, Math.max(0, pan));
+
+                _this.app.css("transform", "translateX("+_this.diffValue+") rotateY("+(90 * pan)+"deg)");
+
+                _this.opacityNext.css("opacity", 0.75 + s);
+                _this.opacity.css("opacity", 1.25 - s);
+
+                requestAnimationFrame(animloop);
+              }
+            })();
+          }
+        });
+
+        document.addEventListener("touchmove", function(e) {
+          if (e.targetTouches.length == 1) {
+            var pageXBefore = _this.pageX;
+            _this.pageX = e.targetTouches[0].pageX;
+
+            var timeBefore = _this.time;
+            _this.time = new Date().getTime();
+
+            var deltaT = _this.time - timeBefore;
+
+            _this.diff = (_this.pageX - _this.startX);
+            _this.diffValue = _this.diff + "px";
+
+            _this.velocity = (pageXBefore - _this.pageX) / deltaT;
+            //console.log(_this.velocity);
+          }
+        });
+
+        document.addEventListener("touchend", function(e) {
+          app.touching = false;
+          if (Math.abs(_this.pageX - _this.startX) > _this.width/2) {
+            _this.app.css("transform", "translateX(0)");
+            _this.opacityNext.css("opacity", 1);
+            _this.opacity.css("opacity", 0);
+            _this.fullyLoaded();
+          } else {
+            _this.app.css("transform", "translateX(0)");
+            _this.opacityNext.css("opacity", 0);
+            _this.opacity.css("opacity", 1);
+          }
+        });
     },
 
     i: 0,
@@ -128,31 +207,30 @@ var app = {
           if(model.name == "K") app.kings++;
 
           var card = {
-            title: app.beerify(titles[model.name]),
-            text: app.beerify(texts[model.name]),
-            text2: app.beerify(texts2[model.name]),
+            title: this.beerify(titles[model.name]),
+            text: this.beerify(texts[model.name]),
+            text2: this.beerify(texts2[model.name]),
             type: "&" + model.type + ";",
             name: model.name,
             color: model.color,
-            percent: (app.i / 52) * 100,
-            kings: app.kings
+            percent: (this.i / 52) * 100,
+            kings: this.kings
           };
 
-          if (app.kings == 4) {
-            console.log("KING");
-            card.text = app.beerify(kingText);
+          if (this.kings == 4) {
+            card.text = this.beerify(kingText);
             card.text2 = "";
             card.percent = 100;
           }
 
           $(sel).html(this.template(card));
 
-          if (app.kings == 4) {
+          if (this.kings == 4) {
             $(sel).find(".app").addClass("last-king");
             createCardDeck();
             shuffle();
-            app.i = 0;
-            app.kings = 0;
+            this.i = 0;
+            this.kings = 0;
           }
         }
     },
