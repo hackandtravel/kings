@@ -31,7 +31,7 @@ function shuffle()
   }
 }
 // return undefined if there are no cards left
-function getNextCard()
+function getNextCard(cards)
 {
 	var remCard = cards.pop();
 	removedCards.push(remCard);

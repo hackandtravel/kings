@@ -10,7 +10,7 @@ var titles = {
   7: "Hands Up",
   8: "Mate",
   9: "Rhyme Time",
-  10:	"Category",
+  10: "Category",
   J: "Guys Drink",
   Q: "Girls Drink",
   K: "King's Cup"
@@ -26,7 +26,7 @@ var texts = {
   7: "Last person to raise their hand must drink.",
   8: "Choose a person to be your mate and they drink when you drink for the rest of the game.",
   9: "Say a word, and the person to your right has to say a word that rhymes. This continues until someone can't.",
-  10:	"Come up with a category, and the person to your right must name something that falls within that category. This continues until someone can't.",
+  10: "Come up with a category, and the person to your right must name something that falls within that category. This continues until someone can't.",
   J: "All the guys at the table must take a drink.",
   Q: "All the girls at the table must take a drink.",
   K: "Put some of your drink into the King's Cup."
@@ -50,239 +50,280 @@ var texts2 = {
   K: "When the 4th King is drawn, this person must drink the contents of the King's Cup."
 };
 
-Math.sign = function(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; };
+Math.sign = function (x) {
+  return x > 0 ? 1 : x < 0 ? -1 : 0;
+};
 
 var AppView = React.createClass({
-  getInitialState: function() {
-    createCardDeck();
-    shuffle();
+    getInitialState: function () {
+      var cards = createCardDeck();
 
-    return {
-      i: 0,
-      kings: 0,
-      nextCard: {
-        title: "Kings",
-        text: "Tap anywhere to draw the next card.",
-        text2: "Remember to drink in moderation.",
-        type: "",
-        name: "",
-        color: "red",
-        percent: 100,
-        kings: 4
-      },
-      card: {},
-    };
-  },
+      return {
+        i: 0,
+        kings: 0,
+        cards: cards,
+        nextCard: {
+          title: "Kings",
+          text: "Swipe to draw the next card.",
+          text2: "Remember to drink in moderation.",
+          type: "",
+          name: "",
+          color: "red",
+          percent: 100,
+          kings: 4
+        },
+        card: {}
+      };
+    },
 
-  componentWillMount: function() {
-    this.nextCard();
-    this.animCount = 0;
-  },
+    componentWillMount: function () {
+      this.nextCard();
+    },
 
-  modelToCard: function(model) {
-    return {
-      title: (titles[model.name]),
-      text: (texts[model.name]),
-      text2: (texts2[model.name]),
-      type: "&" + model.type + ";",
-      name: model.name,
-      color: model.color,
-      percent: (this.state.i / 52) * 100,
-      kings: this.state.kings
-    };
-  },
+    modelToCard: function (model) {
+      return {
+        title: (titles[model.name]),
+        text: (texts[model.name]),
+        text2: (texts2[model.name]),
+        type: "&" + model.type + ";",
+        name: model.name,
+        color: model.color,
+        percent: (this.state.i / 52) * 100,
+        kings: this.state.kings
+      };
+    },
 
-  nextCard: function() {
-    var card = this.state.nextCard;
+    nextCard: function () {
+      var card = this.state.nextCard;
 
+      var nextModel = getNextCard(this.state.cards);
 
-    var nextModel = getNextCard();
+      this.state.i++;
+      if (nextModel.name == "K") this.state.kings++;
 
-    this.state.i++;
-    if(nextModel.name == "K") this.state.kings++;
+      var nextCard = this.modelToCard(nextModel);
 
-    var nextCard = this.modelToCard(nextModel);
+      if (this.state.kings == 4) {
+        nextCard.text = kingText;
+        nextCard.text2 = "";
+        nextCard.percent = 100;
 
-    if (this.state.kings == 4) {
-      nextCard.text = kingText;
-      nextCard.text2 = "";
-      nextCard.percent = 100;
+        this.state.cards = createCardDeck();
+        this.state.i = 0;
+        this.state.kings = 0;
+      }
 
-      createCardDeck();
-      shuffle();
-      this.state.i = 0;
-      this.state.kings = 0;
-    }
+      this.setState({
+        nextCard: nextCard,
+        card: card
+      });
+    },
 
-    this.setState({
-      nextCard: nextCard,
-      card: card
-    });
-  },
+    saturate: function (v) {
+      return Math.min(1, Math.max(0, v));
+    },
 
-  touchStart: function(e) {
-    if (e.targetTouches.length == 1) {
-      e.preventDefault();
+    updateDOM: function (diff) {
+      var percentage = diff / this.width;
+      var sign = Math.sign(percentage);
+      percentage = Math.abs(percentage / 2);
 
-      var touch = e.targetTouches[0];
+      var tilt = sign * this.saturate(percentage - 0.25);
 
-      this.startX = touch.pageX;
-      this.diff = 0;
+      this.app.css("transform", "translateX(" + diff + "px) rotateY(" + (90 * tilt) + "deg)");
+      this.opacityNext.css("opacity", 0.75 + percentage);
+      this.opacity.css("opacity", 1.25 - percentage);
+    },
 
-      this.touching = true;
-      this.animating = false;
+    alpha: 0.9,
 
-      this.app = $("#app");
-      this.appNext = $("#app-next");
-      this.opacity = this.app.find(".opacity");
-      this.opacityNext = this.appNext.find(".opacity");
+    // moveLoopNum: 1,
 
-      this.width = screen.availWidth;
+    magicNumber: screen.availWidth,
 
+    move: function () {
       var _this = this;
-      var alpha = 0.4;
-	  var magicNumber = 50;
-      var animCount = this.animCount++;
-	  this.velocity = 0;
-	  this.lastTime = 0;
-	  this.lastPageX  = this.startX;
-	  this.pageX = this.startX;
-      (function animloop(time) {
-       // console.log("animloop " + time);
+      // var moveLoopNum = _this.moveLoopNum++;
 
-        var s = _this.diff / _this.width;
-        var sign = Math.sign(s);
-        s = Math.abs(s / 2);
+      var moveLoop = function (time) {
 
-        var pan = s - 0.25;
-        pan = sign * Math.min(1, Math.max(0, pan));
-		
-        _this.app.css("transform", "translateX("+_this.diff+"px) rotateY("+(90 * pan)+"deg)");
-        _this.opacityNext.css("opacity", 0.75 + s);
-        _this.opacity.css("opacity", 1.25 - s);
-        if (_this.touching) {
-         
-		  	// if wrong normalize screen width		
-			var timeDiff = time - _this.lastTime;	
-			if(timeDiff > 0 )
-			{
-				_this.velocity = _this.velocity * (1-alpha) + alpha*( _this.pageX-_this.lastPageX ) / timeDiff;
-			}
-			_this.lastPageX = _this.pageX;
-			_this.lastTime = time;		
-			requestAnimationFrame(animloop);
-			
-        } else if (_this.animating) {
-			var timeDiff = time - _this.lastTime;	
-			//_this.velocity = _this.velocity * (1-alpha) + alpha*(_this.pageX-_this.lastPageX) / timeDiff;
-			var direction = Math.sign(_this.pageX - _this.startX);
-			var futureX = Math.abs(_this.diff) + Math.abs(magicNumber * _this.velocity);
-			if(direction <0 )
-			{
-				if(futureX < _this.width / 2 ) 
-				{
-					console.log("finish swipe animation ", futureX, _this.width/2, magicNumber*_this.velocity );
-				}
-				else
-				{
-					console.log("DO nothing ", futureX, _this.width/2, magicNumber*_this.velocity );
-				}
-			}
-			else
-			{
-				if(futureX > _this.width / 2 ) 
-				{
-					console.log("finish swipe animation ", futureX, _this.width/2, magicNumber*_this.velocity );
-				}
-				else
-				{
-						console.log("DO nothing ", futureX, _this.width/2, magicNumber*_this.velocity );
-				}
-			}
+        // console.log("moveLoop " + moveLoopNum);
+        // console.log("moveLoop touching = " + _this.touching);
 
-		
-		/* var deltaT = time - _this.lastTime;
-          console.log(deltaT, _this.velocity);
-          _this.lastTime = time;
-
-             if (sign > 0) {
-            _this.diff -= 10;
-            if (_this.diff <= 0) {
-              _this.animating = false;
-            }
-          } else {
-            _this.diff += 10;
-            if (_this.diff >= _this.width) {
-              _this.animating = false;
-            }
-          }
-
-       
-          _this.animating = false;
-
-          if (Math.abs(_this.diff) > _this.width/2) {
-            _this.nextCard();
-          } 
-
-          _this.app.css("transform", "translateX(0)");
-          _this.opacityNext.css("opacity", 0);
-          _this.opacity.css("opacity", 1);
-         
-*/
-		_this.diff = _this.diff+ 5*_this.velocity;
-		if(_this.diff < _this.width || _this.diff > 0)
-		{
-          requestAnimationFrame(animloop); 
-		}
+        var timeDiff = time - _this.lastTime;
+        if (timeDiff > 0) {
+          _this.velocity = (1 - _this.alpha) * _this.velocity + _this.alpha * (_this.pageX - _this.lastPageX) / timeDiff;
         }
-      })();
-    }
-  },
 
-  touchMove: function(e) {
-    if (e.targetTouches.length == 1) {
+        _this.lastPageX = _this.pageX;
+        _this.lastTime = time;
+
+        // console.log(_this.velocity);
+
+        _this.updateDOM(_this.diff);
+
+        if (_this.touching === true) {
+          requestAnimationFrame(moveLoop);
+        }
+      };
+
+      requestAnimationFrame(moveLoop);
+    },
+
+    /**
+     * @param b start value
+     * @param c change in value
+     * @param d duration
+     * @param callback function to call after animation finished
+     */
+    animate: function (b, c, d, callback) {
+      var _this = this;
+      var start = null;
+
+      var animationLoop = function (time) {
+        if (start === null) start = time;
+
+        _this.diff = _this.linearTween(time - start, b, c, d);
+        _this.updateDOM(_this.diff);
+
+        if (time < start + d) {
+          requestAnimationFrame(animationLoop);
+        } else if (callback) {
+          callback.call(_this);
+        }
+      };
+
+      requestAnimationFrame(animationLoop);
+    },
+
+    touchStart: function (e) {
       e.preventDefault();
+      if (e.targetTouches.length == 1 && !this.animating) {
 
-      var touch = e.targetTouches[0];
+        var touch = e.targetTouches[0];
 
-      this.pageX = touch.pageX;
-      this.diff = this.pageX - this.startX;
+        this.startX = touch.pageX;
+        this.diff = 0;
 
-    }
-  },
+        this.touching = true;
 
-  touchEnd: function(e) {
-    if (e.targetTouches.length == 1) {
+        this.app = $("#app");
+        this.appNext = $("#app-next");
+        this.opacity = this.app.find(".opacity");
+        this.opacityNext = this.appNext.find(".opacity");
+
+        this.width = screen.availWidth;
+
+        this.velocity = 0;
+        this.lastTime = 0;
+        this.lastPageX = this.startX;
+        this.pageX = this.startX;
+
+        this.move()
+      }
+    },
+
+    touchMove: function (e) {
       e.preventDefault();
+      if (e.targetTouches.length >= 1 && this.touching) {
+        var touch = e.targetTouches[0];
 
-      this.touchMove(e);
+        this.pageX = touch.pageX;
+        this.diff = this.pageX - this.startX;
+      }
+    },
 
-      this.touching = false;
-      this.animating = true;
+    touchEnd: function (e) {
+      e.preventDefault();
+      if (e.targetTouches.length == 0 && this.touching) {
+
+        this.touching = false;
+
+        var direction = Math.sign(this.pageX - this.startX);
+        var futureDiff = this.diff + Math.floor(this.magicNumber * this.velocity);
+        console.log(direction + " " + futureDiff);
+
+        var startValue, changeInValue, duration, callback;
+        var _this = this;
+
+        var reset = function () {
+          _this.updateDOM(0);
+          _this.animating = false;
+        };
+
+        var success = function () {
+          _this.nextCard();
+          reset();
+        };
+
+        if (direction > 0) {
+          this.animating = true;
+          if (futureDiff > this.width / 2) {
+            startValue = this.diff;
+            changeInValue = this.width - this.diff;
+            callback = success;
+          } else {
+            startValue = this.diff;
+            changeInValue = -this.diff;
+            callback = reset;
+          }
+        } else if (direction < 0) {
+          this.animating = true;
+          if (-futureDiff > this.width / 2) {
+            startValue = this.diff;
+            changeInValue = -(this.width + this.diff);
+            callback = success;
+          } else {
+            startValue = this.diff;
+            changeInValue = -this.diff;
+            callback = reset;
+          }
+        }
+
+        if (this.animating) {
+          if (callback == success) {
+            duration = Math.min(333, Math.abs(changeInValue) / Math.abs(this.velocity));
+          } else {
+            duration = 100;
+          }
+          this.animate.call(this, startValue, changeInValue, duration, callback);
+        }
+      }
+    },
+
+    /**
+     * @param t current time
+     * @param b start value
+     * @param c change in value
+     * @param d duration
+     * @returns {number}
+     */
+    linearTween: function (t, b, c, d) {
+      return c * t / d + b;
+    },
+
+    render: function () {
+      var card = this.state.card;
+      var nextCard = this.state.nextCard;
+
+      return (
+        <div id="perspective" onTouchStart={this.touchStart} onTouchMove={this.touchMove} onTouchEnd={this.touchEnd} onTouchCancel={this.touchEnd} onTouchLeave={this.touchEnd}>
+          <div id="app-next" className="page">
+            <CardView card={nextCard} />
+          </div>
+          <div id="app" className="page">
+            <CardView card={card} />
+          </div>
+        </div>
+        );
     }
-  },
-
-  render: function() {
-    var card = this.state.card;
-    var nextCard = this.state.nextCard;
-
-    return (
-      <div id="perspective" onTouchStart={this.touchStart} onTouchMove={this.touchMove} onTouchEnd={this.touchEnd}>
-        <div id="app-next" className="page">
-          <CardView card={nextCard} />
-        </div>
-        <div id="app" className="page">
-          <CardView card={card} />
-        </div>
-      </div>
-    );
-  }
-});
+  })
+  ;
 
 var CardView = React.createClass({
   beerIcon: '<i class="fa fa-beer"></i>',
 
-  beerify: function(text) {
+  beerify: function (text) {
     text = _.escape(text);
     text = text
       .replace(/[dD]rinking/g, this.beerIcon)
@@ -291,7 +332,7 @@ var CardView = React.createClass({
     return <span dangerouslySetInnerHTML={{__html: text}} />
   },
 
-  render: function() {
+  render: function () {
     var card = this.props.card;
 
     var classes = "app " + card.color + " " + card.name;
@@ -334,7 +375,7 @@ var CardView = React.createClass({
           </div>
         </div>
       </div>
-    );
+      );
   }
 });
 
