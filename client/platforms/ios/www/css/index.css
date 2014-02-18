@@ -275,9 +275,9 @@ body {
   bottom: 0.20rem;
   bottom: 20vw;
 
-  padding: 9px 7.5px;
-  padding: 0.03rem 0.025rem;
-  padding: 3vw 2.5vw;
+  padding: 15px 7.5px;
+  padding: 0.05rem 0.025rem;
+  padding: 5vw 2.5vw;
 }
 
 .progress {
@@ -343,7 +343,7 @@ body {
   .app .scroll {
     top: 22.5vh;
     bottom: 20vh;
-    padding: 3vh 2.5vh;
+    padding: 5vh 2.5vh;
   }
 
   .progress {
