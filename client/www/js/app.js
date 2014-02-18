@@ -324,12 +324,18 @@ var AppView = React.createClass({
     }
   },
 
+  onMouseUp: function (e) {
+    this.saveDOMElements();
+    this.width = screen.availWidth;
+    this.animate(0, this.width, 300, this.success);
+  },
+
   render: function () {
     var card = this.state.card;
     var nextCard = this.state.nextCard;
 
     return (
-      <div id="perspective" onTouchStart={this.touchStart} onTouchMove={this.touchMove} onTouchEnd={this.touchEnd} onTouchCancel={this.touchEnd} onTouchLeave={this.touchEnd}>
+      <div id="perspective" onMouseUp={this.onMouseUp} onTouchStart={this.touchStart} onTouchMove={this.touchMove} onTouchEnd={this.touchEnd} onTouchCancel={this.touchEnd} onTouchLeave={this.touchEnd}>
         <div id="app-next" className="page">
           <CardView card={nextCard} />
         </div>
