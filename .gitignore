@@ -3,4 +3,5 @@
 *.iml
 *.keystore
 **/.module-cache/
-Kings/platforms/*
+Kings/
+Kings1/platforms/bin/
