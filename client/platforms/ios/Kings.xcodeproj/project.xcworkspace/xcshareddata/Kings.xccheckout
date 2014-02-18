@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1384E2D7-5D47-45F0-9044-6DE9D001CD21</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Kings</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3DF93A50-B2A6-486C-B48E-C90ED26FC737</key>
+		<string>https://github.com/Hackntravel/kings.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Kings/platforms/ios/Kings.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3DF93A50-B2A6-486C-B48E-C90ED26FC737</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Hackntravel/kings.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3DF93A50-B2A6-486C-B48E-C90ED26FC737</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3DF93A50-B2A6-486C-B48E-C90ED26FC737</string>
+			<key>IDESourceControlWCCName</key>
+			<string>kings</string>
+		</dict>
+	</array>
+</dict>
+</plist>
