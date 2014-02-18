@@ -33,63 +33,36 @@ body {
 
 #perspective {
   -webkit-perspective: 400px;
+}
+
+#perspective, .app, .page, .bg, .opacity {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.app {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-
-#app, #app-next {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-h1, h2, p, .app .card {
-  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
 .app .card {
   position: absolute;
-  right: 10px;
-  right: 2.5vw;
 }
 
 .app h1 {
   font-family: 'Roboto Slab', serif;
-  font-size: 32px;
-  font-size: 10vw;
   font-weight: 700;
 }
 
 .app p {
   font-family: 'Roboto Slab', serif;
-  font-size: 24px;
-  font-size: 7vw;
   font-weight: 400;
 }
 
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-  .app h1 {
-    font-size: 32px;
-    font-size: 10vh;
-  }
-
-  .app p {
-    font-size: 24px;
-    font-size: 7vh;
-  }
+.app .scroll {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
 }
 
 .red .opacity {
@@ -114,24 +87,20 @@ h1, h2, p, .app .card {
   background-color: #333;
 }
 
-hr {
-  opacity: 0.1;
+.red .card-title {
+  border-color: rgba(217, 83, 79, 0.15);
 }
 
-.red hr {
-  border-color: #d9534f;
+.black .card-title {
+  border-color: rgba(51, 51, 51, 0.15);
 }
 
-.black hr {
-  border-color: #333;
+.last-king.red .card-title {
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
-.last-king.red hr {
-  border-color: #fff;
-}
-
-.last-king.black hr {
-  border-color: #fff;
+.last-king.black .card-title {
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .muted {
@@ -149,7 +118,6 @@ hr {
 
 .progress {
   width: 100%;
-  height: 10px;
   position: absolute;
   top: 0;
   left: 0;
@@ -206,13 +174,16 @@ hr {
   transform: translate3d(-100%, 0, 0);
 }
 
-.rotate {
+.card-title {
   position: absolute;
+  border-bottom: 1px solid #fff;
+}
+
+.card-title.rotate {
   bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 0 10px;
-  padding: 0 2.5vw;
+}
+
+.rotate {
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
@@ -222,16 +193,15 @@ hr {
 
 .king-count {
   width: 100%;
+  position: absolute;
   text-align: center;
+  left: 0;
 }
 
 .dot {
   display: inline-block;
-  width: 10px;
-  height: 10px;
   background-color: #333;
-  border-radius: 5px;
-  margin-left: 2px;
+  border-radius: 100%;
 }
 
 .red .dot {
@@ -243,12 +213,6 @@ hr {
 }
 
 .bg, .opacity {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   -ms-transform: translate3d(0, 0, 0);
@@ -261,7 +225,148 @@ hr {
 }
 
 .opacity {
-  padding: 10px 10px 0;
-  padding: 10px 2.5vw 0;
   background: #fff;
+}
+
+/**********
+ * SIZING *
+ * ********/
+
+.app .card {
+  right: 7.5px;
+  right: 0.025rem;
+  right: 2.5vw;
+}
+
+.app h1 {
+  font-size: 27px;
+  font-size: 0.09rem;
+  font-size: 9vw;
+
+  line-height: 30px;
+  line-height: 0.10rem;
+  line-height: 10vw;
+
+  margin: 15px 0;
+  margin: 0.05rem 0;
+  margin: 5vw 0;
+}
+
+.app p {
+  font-size: 21px;
+  font-size: 0.07rem;
+  font-size: 7vw;
+
+  line-height: 30px;
+  line-height: 0.10rem;
+  line-height: 10vw;
+
+  margin: 0 0 7.5px 0;
+  margin: 0 0 0.025rem 0;
+  margin: 0 0 2.5vw 0;
+}
+
+.app .scroll {
+  top: 67.5px;
+  top: 0.225rem;
+  top: 22.5vw;
+
+  bottom: 60px;
+  bottom: 0.20rem;
+  bottom: 20vw;
+
+  padding: 9px 7.5px;
+  padding: 0.03rem 0.025rem;
+  padding: 3vw 2.5vw;
+}
+
+.progress {
+  height: 7.5px;
+  height: 0.025rem;
+  height: 2.5vw;
+}
+
+.card-title {
+  left: 7.5px;
+  left: 0.025rem;
+  left: 2.5vw;
+
+  right: 7.5px;
+  right: 0.025rem;
+  right: 2.5vw;
+}
+
+.card-title.no-rotate {
+  top: 7.5px;
+  top: 0.025rem;
+  top: 2.5vw;
+}
+
+
+.king-count {
+  bottom: 67.5px;
+  bottom: 0.225rem;
+  bottom: 22.5vw;
+}
+
+.dot {
+  width: 7.5px;
+  width: 0.025rem;
+  width: 2.5vw;
+
+  height: 7.5px;
+  height: 0.025rem;
+  height: 2.5vw;
+
+  margin-left: 3px;
+  margin-left: 0.01rem;
+  margin-left: 1vw;
+}
+
+@media screen and (min-aspect-ratio: 1/1) {
+  .app .card {
+    right: 2.5vh;
+  }
+
+  .app h1 {
+    font-size: 9vh;
+    line-height: 10vh;
+    margin: 5vh 0;
+  }
+
+  .app p {
+    font-size: 7vh;
+    line-height: 10vh;
+    margin: 0 0 2.5vh 0;
+  }
+
+  .app .scroll {
+    top: 22.5vh;
+    bottom: 20vh;
+    padding: 3vh 2.5vh;
+  }
+
+  .progress {
+    height: 2.5vh;
+  }
+
+  .card-title {
+    left: 2.5vh;
+    right: 2.5vh;
+  }
+
+  .card-title.no-rotate {
+    top: 2.5vh;
+  }
+
+
+  .king-count {
+    bottom: 22.5vh;
+  }
+
+  .dot {
+    width: 2.5vh;
+    height: 2.5vh;
+    margin-left: 1vh;
+  }
 }

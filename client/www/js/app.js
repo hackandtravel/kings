@@ -32,8 +32,8 @@ var texts = {
   6: "Place your thumb on the table whenever you like.",
   7: "Last person to raise their hand must drink.",
   8: "Choose a person to be your mate and they drink when you drink for the rest of the game.",
-  9: "Say a word, and the person to your right has to say a word that rhymes. This continues until someone can't.",
-  10: "Come up with a category, and the person to your right must name something that falls within that category. This continues until someone can't.",
+  9: "Say a word, and the person to your right has to say a word that rhymes. This continues until someone can't come up with a word.",
+  10: "Come up with a category, and the person to your right must name something that falls within that category. This continues until someone can't come up with something.",
   J: "All the guys at the table must take a drink.",
   Q: "All the girls at the table must take a drink.",
   K: "Put some of your drink into the King's Cup."
@@ -89,6 +89,42 @@ var AppView = React.createClass({
 
   componentDidMount: function () {
     $(document).on("keyup", this.onKeyUp);
+
+    // http://codepen.io/romanrudenko/pen/GrqcI
+    (function (doc, win) {
+        var docEl = doc.documentElement;
+        var recalc = function () {
+          if (!window.matchMedia) return;
+
+          var mq = window.matchMedia("(min-aspect-ratio: 1/1)");
+
+          if (!mq.matches) {
+            var clientWidth = docEl.clientWidth;
+          } else if (mq.matches) {
+            var clientWidth = docEl.clientHeight;
+          }
+
+          docEl.style.fontSize = clientWidth + 'px';
+          docEl.style.display = "none";
+          docEl.clientWidth; // Force relayout - important to new Androids
+          docEl.style.display = "";
+        };
+
+        if (!doc.addEventListener) return;
+
+        var hasSupportFor = function (unit) {
+          var div = doc.createElement('div');
+          div.setAttribute('style', 'font-size: 1' + unit);
+
+          return (div.style.fontSize == '1' + unit);
+        };
+
+        // if (hasSupportFor("vw") && hasSupportFor("vh")) return;
+        if (!hasSupportFor("rem")) return;
+
+        win.addEventListener('resize', recalc, false);
+        recalc();
+    })(document, window);
   },
 
   modelToCard: function (model) {
@@ -377,17 +413,8 @@ var CardView = React.createClass({
           <div className="progress">
             <div className="progress-bar" role="progressbar" aria-valuenow={card.percent} aria-valuemin="0" aria-valuemax="100" style={{width: card.percent + "%"}} />
           </div>
-          <h1>
-            {this.beerify(card.title)}
-            <span className="card">
-              <span className="color" dangerouslySetInnerHTML={{__html: card.type}} />
-              <span className="name">{card.name}</span>
-            </span>
-          </h1>
-          <hr/>
-          <p className="">{this.beerify(card.text)}</p>
-          <p className="thin">{this.beerify(card.text2)}</p>
-          <div className="rotate">
+
+          <div className="card-title no-rotate">
             <h1>
               {this.beerify(card.title)}
               <span className="card">
@@ -395,11 +422,27 @@ var CardView = React.createClass({
                 <span className="name">{card.name}</span>
               </span>
             </h1>
-            <hr/>
-            <div className="king-count">
-              {kingsCount}
-            </div>
           </div>
+
+          <div className="scroll">
+            <p className="">{this.beerify(card.text)}</p>
+            <p className="thin">{this.beerify(card.text2)}</p>
+          </div>
+
+          <div className="card-title rotate">
+            <h1>
+              {this.beerify(card.title)}
+              <span className="card">
+                <span className="color" dangerouslySetInnerHTML={{__html: card.type}} />
+                <span className="name">{card.name}</span>
+              </span>
+            </h1>
+          </div>
+
+          <div className="king-count">
+            {kingsCount}
+          </div>
+
         </div>
       </div>
       );
