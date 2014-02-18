@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.github.hackandtravel.kings" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Kings (Drinking Game)</name>
+    <name>Kings</name>
     <description>
       We tried to make the most straight-forward kings app out there.
       Always just one swipe away from the next card.
