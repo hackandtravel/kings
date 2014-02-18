@@ -241,7 +241,7 @@ var AppView = React.createClass({
 
         var direction = Math.sign(this.pageX - this.startX);
         var futureDiff = this.diff + Math.floor(this.magicNumber * this.velocity);
-        console.log(direction + " " + futureDiff);
+        // console.log(direction + " " + futureDiff);
 
         var startValue, changeInValue, duration, callback;
         var _this = this;
