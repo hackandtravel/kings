@@ -30,7 +30,7 @@ var texts = {
   4: "Give out two drinks, and take two drinks yourself.",
   5: "Set a rule to be followed.",
   6: "Place your thumb on the table whenever you like.",
-  7: "Last person to raise their hand must drink.",
+  7: "The last person to raise their hand must drink.",
   8: "Choose a person to be your mate and they drink when you drink for the rest of the game.",
   9: "Say a word, and the person to your right has to say a word that rhymes. This continues until someone can't come up with a word.",
   10: "Come up with a category, and the person to your right must name something that falls within that category. This continues until someone can't come up with something.",
