@@ -3,3 +3,4 @@
 *.iml
 *.keystore
 **/.module-cache/
+platforms

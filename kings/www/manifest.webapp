@@ -1,0 +1,18 @@
+{
+  "launch_path": "/index.html",
+  "version": "0.0.2",
+  "name": "Kings",
+  "description": "The most straight-forward drinking game app out there.",
+  "developer": {
+    "name": "Hack & Travel",
+    "url": "http://hackandtravel.tumblr.com"
+  },
+  "icons": {
+    "60": "/img/MozillaFXOSIcon60.png",
+    "128": "/img/MozillaFXOSIcon128.png",
+    "256": "/img/MozillaFXOSIcon256.png",
+    "512": "/img/MozillaFXOSIcon512.png"
+  },
+  "default_locale": "en",
+  "fullscreen": "true"
+}
